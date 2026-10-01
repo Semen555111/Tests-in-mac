@@ -1,11 +1,12 @@
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
 class LoginPage:
-    def __init__(self, page:Page):
+    def __init__(self, page: Page):
         self.page = page
-        self.username_input = page.locator("#username")
-        self.password_input = page.locator("#password")
-        self.login_button = page.locator("#login-button")
+        self.username_input = page.get_by_role("textbox", name="Username")
+        self.password_input = page.get_by_role("textbox", name="Password")
+        self.login_button = page.get_by_role("button", name="Login")
+
     def login(self, username: str, password: str):
-        self.enter_username(username)
-        self.enter_password(password)
-        self.click_login_button()
+        self.username_input.fill(username)
+        self.password_input.fill(password)
+        self.login_button.click()
