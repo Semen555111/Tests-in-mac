@@ -1,13 +1,8 @@
 import pytest
-from playwright.sync_api import sync_playwright
-@pytest.fixture(scope='session')
-def browser():
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless = False)
-        yield browser
-        browser.close()
 @pytest.fixture
-def page(browser):
-    page = browser.new_page()
-    yield page
-    page.close()
+def api_request_context(playwright):
+    request = playwright.request.new_context(
+        extra_http_headers={"Accept": "application/json"}
+    )
+    yield request
+    request.dispose()
